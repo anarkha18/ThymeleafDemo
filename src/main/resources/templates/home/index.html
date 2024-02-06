@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="home/base :: layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<section>
+	<div class="container p-3 col-6">
+		<div class="alert alert-primary text-center" role="alert"
+			th:text="${Employee == null or Employee.id == null} ? 'ADD EMPLOYEE' : 'UPDATE EMPLOYEE'"></div>
+		<div th:if="${successMessage}" class="alert alert-success text-center"
+			role="alert">
+			<p th:text="${successMessage}"></p>
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-danger text-center"
+			role="alert">
+			<p th:text="${errorMessage}"></p>
+		</div>
+		<form th:action="@{/addOrSaveEmployee}" method="post"
+			th:object="${Employee}">
+			<div class="mb-3">
+				<label for="id" class="form-label" hidden>ID : </label> <input
+					type="text" class="form-control" id="id" th:field="*{id}" hidden readonly>
+			</div>
+			<div class="mb-3">
+				<label for="name" class="form-label">Name : </label> <input
+					type="text" class="form-control" id="name" th:field="*{name}">
+				<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+			</div>
+			<div class="mb-3">
+				<label for="phone" class="form-label">Contact No: </label> <input
+					type="text" id="phone" class="form-control" th:field="*{phone}">
+				<div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+			</div>
+			<div class="mb-3">
+				<label for="dob" class="form-label">Date of Birth:</label> <input
+					type="date" class="form-control" id="dob" th:field="*{dob}" />
+				<div th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></div>
+			</div>
+			<div class="mb-3 form-group col-md-6">
+				<label for="gender" class="form-label">Gender:</label>
+				<div class="form-check">
+					<input type="radio" class="form-check-input" id="male"
+						th:field="*{gender}" value="MALE" /> <label
+						class="form-check-label" for="male">Male</label>
+				</div>
+				<div class="form-check">
+					<input type="radio" class="form-check-input" id="female"
+						th:field="*{gender}" value="FEMALE" /> <label
+						class="form-check-label" for="female">Female</label>
+				</div>
+				<div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></div>
+			</div>
+			<div class="mb-3">
+				<label for="email" class="form-label">Email</label> <input
+					type="email" id="email" class="form-control" th:field="*{email}">
+				<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+			</div>
+			<div class="mb-3">
+				<label for="password" class="form-label">Password</label> <input
+					type="text" id="password" class="form-control"
+					th:field="*{password}">
+				<div th:if="${#fields.hasErrors('password')}"
+					th:errors="*{password}"></div>
+			</div>
+			<div class="mb-3">
+				<label for="role" class="form-label">Role</label> <select
+					class="form-control" id="role" th:field="*{role}">
+					<option value="ADMIN">Admin</option>
+					<option value="USER">User</option>
+				</select>
+			</div>
+			<button type="submit" class="btn btn-primary"
+				th:if="${Employee.id == null}">Submit</button>
+			<button type="submit" class="btn btn-primary"
+				th:if="${Employee != null and Employee.id != null}">Update</button>
+		</form>
+		<a th:href="@{/allEmployees}">
+		<button type="submit" class="btn btn-primary">View Employees </button></a>
+	</div>
+</section>
+</body>
+</html>

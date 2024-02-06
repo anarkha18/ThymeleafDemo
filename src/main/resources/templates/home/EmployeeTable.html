@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="home/base :: layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<div class="container p-3 col-8">
+			<div class="alert alert-primary text-center" role="alert">EMPLOYEE
+				TABLE</div>
+			<div th:if="${successMessage}"
+				class="alert alert-success text-center" role="alert">
+				<p th:text="${successMessage}"></p>
+			</div>
+			<div th:if="${errorMessage}" class="alert alert-danger text-center"
+				role="alert">
+				<p th:text="${errorMessage}"></p>
+			</div>
+			<form th:action="@{/allEmployees}" method="get"
+				id="entriesPerPageForm">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="inputGroupSelect01">Entries
+							per page</label>
+					</div>
+					<select class="custom-select" id="EntriesPerPage"
+						name="entriesPerPage">
+						<option value="5" th:selected="${entriesPerPage == 5}">5</option>
+						<option value="10" th:selected="${entriesPerPage == 10}">10</option>
+						<option value="20" th:selected="${entriesPerPage == 20}">20</option>
+						<option value="25" th:selected="${entriesPerPage == 25}">25</option>
+					</select>
+					<div class="input-group-append">
+						<button class="input-group-text" type="submit">show</button>
+					</div>
+				</div>
+			</form>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Name</th>
+						<th scope="col">Phone</th>
+						<th scope="col">Email</th>
+						<th scope="col">D.O.B</th>
+						<th scope="col">Gender</th>
+						<th scope="col">Role</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody th:each="n : ${employees}">
+					<tr>
+						<th scope="row" th:text="${n.id}"></th>
+						<td th:text="${n.name}"></td>
+						<td th:text="${n.phone}"></td>
+						<td th:text="${n.email}"></td>
+						<td th:text="${n.dob}"></td>
+						<td th:text="${n.gender}"></td>
+						<td th:text="${n.role}"></td>
+						<td><a th:href="@{'/updateEmployee/' + ${n.id}}">
+								<button type="button" class="btn btn-primary">Update</button>
+						</a> &nbsp; <a th:href="@{'/deleteEmployee/' + ${n.id}}"
+							onclick="return confirm('Are you sure to delete?')">
+								<button type="button" class="btn btn-primary">Delete</button>
+						</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<li th:if="${currentpage != 0}" class="page-item"><a
+						class="page-link"
+						th:href="@{'/allEmployees/?page=' +${currentpage-1} + '&entriesPerPage=' + ${entriesPerPage}}">Previous</a>
+					</li>
+					<li th:classappend="${currentpage == i-1} ? 'active' : ' '"
+						th:each="i : ${#numbers.sequence(1, totalpages)}"
+						class="page-item"><a class="page-link"
+						th:href="@{'/allEmployees/?page=' + ${i-1} + '&entriesPerPage=' + ${entriesPerPage}}"
+						th:text="${i}"></a></li>
+					<li th:if="${currentpage+1 != totalpages}" class="page-item">
+						<a class="page-link"
+						th:href="@{'/allEmployees/?page=' +${currentpage+1} + '&entriesPerPage=' + ${entriesPerPage}}">Next</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</section>
+</body>
+</html>
